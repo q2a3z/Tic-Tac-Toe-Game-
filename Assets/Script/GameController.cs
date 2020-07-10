@@ -12,17 +12,17 @@ public class GameController : MonoBehaviour {
     private string playerSide;
     private int moveCount;
     public Button Restart;
-
+    private Minimax minimax;
     void Awake ()
     {
+        minimax = GameObject.FindObjectOfType<Minimax>();
         SetGameControllerReferenceOnButtons();
         playerSide = "X";
         gameOverPanel.SetActive(false);
         moveCount = 0;
         Button btn = Restart.GetComponent<Button>();
-		    btn.onClick.AddListener(RestartGame);
+	    btn.onClick.AddListener(RestartGame); 
     }
-
     void SetGameControllerReferenceOnButtons ()
     {
         for (int i = 0; i < buttonList.Length; i++)
@@ -36,57 +36,80 @@ public class GameController : MonoBehaviour {
         return playerSide;
     }
 
-    public void EndTurn ()
-    {
-        moveCount++;
+    public string checkWinner(){
+        //horizontal
         if (buttonList [0].text == playerSide && buttonList [1].text == playerSide && buttonList [2].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (buttonList [3].text == playerSide && buttonList [4].text == playerSide && buttonList [5].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (buttonList [6].text == playerSide && buttonList [7].text == playerSide && buttonList [8].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
-
+        //vertical
         if (buttonList [0].text == playerSide && buttonList [3].text == playerSide && buttonList [6].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (buttonList [1].text == playerSide && buttonList [4].text == playerSide && buttonList [7].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (buttonList [2].text == playerSide && buttonList [5].text == playerSide && buttonList [8].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
-
+        //diagnol
         if (buttonList [0].text == playerSide && buttonList [4].text == playerSide && buttonList [8].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (buttonList [2].text == playerSide && buttonList [4].text == playerSide && buttonList [6].text == playerSide)
         {
-            GameOver();
+            //GameOver();
+            return playerSide;
         }
 
         if (moveCount >= 9)
         {
-            SetGameOverText ("It's a draw!");
+            //GameOver();
+            return "T";
+            //SetGameOverText ("It's a draw!");
         }
-        ChangeSides();
-
+        return "";
     }
-    void ChangeSides ()
+    public void EndTurn ()
+    {
+        moveCount++;
+        string result = checkWinner();
+        if(result == "X")
+            GameOver();
+        if(result == "O")
+            GameOver();
+        if(result == "T")
+            SetGameOverText ("It's a draw!");
+        ChangeSides();
+        if((!gameOverPanel.activeSelf)&&(playerSide == "O"))
+            minimax.bestMove();
+    }
+        
+    public void ChangeSides ()
     {
         playerSide = (playerSide == "X") ? "O" : "X";
     }
@@ -116,6 +139,8 @@ public class GameController : MonoBehaviour {
         {
             buttonList [i].text = "";
         }
+        //if((!gameOverPanel.activeSelf)&&(playerSide == "O"))
+        //    minimax.bestMove();
     }
     void SetBoardInteractable (bool toggle)
     {
