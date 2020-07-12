@@ -26,7 +26,7 @@ public class Minimax : MonoBehaviour
                buttonList[i].text = "O";
                int score = minimax(buttonList,0,false);
                buttonList[i].text = "";
-               Debug.Log("score["+i+"]:"+score);
+               //Debug.Log("score["+i+"]:"+score);
                if (score > bestScore) {
                   bestScore = score;
                   move = i;
@@ -41,10 +41,10 @@ public class Minimax : MonoBehaviour
     private int scores(string result){
         if(result == "O")
             return 10;
-        if(result == "X")
+        else if(result == "X")
             return -10;
-
-        return 0;
+        else
+            return 0;
     }
     public int minimax(Text[] buttonList,int depth,bool isMaximizing){
 
@@ -56,7 +56,7 @@ public class Minimax : MonoBehaviour
         } 
         ///*
         if(isMaximizing){
-           int bestScore = -10;
+           int bestScore = -1000;
             for(int i = 0; i < 9; i++){
                 if(buttonList[i].text == ""){
                     buttonList[i].text = "O";
@@ -74,7 +74,7 @@ public class Minimax : MonoBehaviour
         //return 0;
         ///*
         else{
-            int bestScore = 10;
+            int bestScore = 1000;
             for(int i = 0; i < 9; i++){
                 if(buttonList[i].text == ""){
                     buttonList[i].text = "X";
@@ -87,8 +87,7 @@ public class Minimax : MonoBehaviour
                 }
             } 
             return bestScore;
-        }
-        
+        }    
         //*/
     }
 }
